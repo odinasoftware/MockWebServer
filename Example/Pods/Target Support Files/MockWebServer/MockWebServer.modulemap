@@ -1,0 +1,6 @@
+framework module MockWebServer {
+  umbrella header "MockWebServer-umbrella.h"
+
+  export *
+  module * { export * }
+}

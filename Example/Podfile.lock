@@ -1,0 +1,22 @@
+PODS:
+  - Expecta (1.0.5)
+  - MockWebServer (0.1.0)
+  - Specta (1.0.5)
+
+DEPENDENCIES:
+  - Expecta
+  - MockWebServer (from `../`)
+  - Specta
+
+EXTERNAL SOURCES:
+  MockWebServer:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
+  MockWebServer: 89cdff38e9dec27b44752884e5c70fe913207e59
+  Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
+
+PODFILE CHECKSUM: 642733768e06e0cb9e1f00735de5552b52913443
+
+COCOAPODS: 1.1.1
