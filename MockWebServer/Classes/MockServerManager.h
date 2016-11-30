@@ -16,6 +16,8 @@
 	NSInteger	activeThread;
 	NSCondition	*waitForThread;
     BOOL        isListening;
+    BOOL        isStopped;
+    int         listenfd;
 }
 
 @property(nonatomic, retain)    NSString        *requestString;
@@ -25,6 +27,7 @@
 @property(nonatomic)            NSInteger       responseCode;
 
 - (void)startAndWait;
+- (void)stop;
 - (void)startLocalServerManager;
 - (void)exitConnThread:(id)thread;
 - (void)requestContains:(NSString*)request;

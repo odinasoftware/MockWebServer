@@ -19,12 +19,11 @@
 #import "MockServer.h"
 #import "MockServerManager.h"
 
-#define MAX_LOCAL_SERVER_THREAD	6
+#define MAX_LOCAL_SERVER_THREAD	1
+#define INTERRUPT_SIGNAL        2
 #define LOCAL_PORT				9000
 #define LISTENQ					32
 
-
-static MockServerManager *sharedLocalServerManager = nil;
 
 @implementation MockServerManager
 
@@ -32,29 +31,7 @@ static MockServerManager *sharedLocalServerManager = nil;
 @synthesize requestHeaders;
 @synthesize responseBody;
 
-+ (MockServerManager*)sharedLocalServerManager
-{
-	@synchronized (self) {
-		if (sharedLocalServerManager == nil) {
-			[[self alloc] init];
-		}
-	}
-	
-	return sharedLocalServerManager;
-}
-
-+ (id)allocWithZone:(NSZone*)zone
-{
-	@synchronized (self) {
-		if (sharedLocalServerManager == nil) {
-			sharedLocalServerManager = [super allocWithZone:zone];
-			return sharedLocalServerManager;
-		}
-	}
-	return nil;
-}
-
-- (id)init 
+- (id)init
 {
 	if ((self = [super init])) {
 		waitForThread = [[NSCondition alloc] init];
@@ -81,7 +58,7 @@ static MockServerManager *sharedLocalServerManager = nil;
 
 - (void)startLocalServerManager
 {
-	int listenfd=-1, connfd=-1;
+	int connfd=-1;
 	struct sockaddr_in cliaddr, servaddr;
 	unsigned int clilen = 0;
 	int optval = 1;
@@ -90,6 +67,8 @@ static MockServerManager *sharedLocalServerManager = nil;
 	
 	
 	//TRACE("%s, ttl: %d\n", __func__, ttl);
+    
+    self->listenfd = -1;
 	
     for (;;) {
         listenfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -150,35 +129,38 @@ static MockServerManager *sharedLocalServerManager = nil;
             } @catch (NSException *exception) {
                 NSLog(@"%s: main: %@: %@", __func__, [exception name], [exception reason]);
             }
-        } while (get_new_socket == NO);
+        } while (get_new_socket == NO && self->isStopped == NO);
+        
+        if (self->isStopped == YES) {
+            TRACE("Listening thread exiting.\n");
+            return;
+        }
         close(listenfd);
         NSLog(@"Close %d and restart socket.\n", listenfd);
         get_new_socket = NO;
+        
     }
 	
 }
 
+- (void)stop
+{
+    self->isStopped = YES;
+    close(self->listenfd);
+    TRACE("Stop=%d", self->listenfd);
+}
+
 - (void)exitConnThread:(id)thread
 {
-    TRACE("%s, id: %p\n", __func__, thread);
-	//if (--activeThread < 0) {
-	//	activeThread = 0;
-	//}
     --activeThread;
 	[waitForThread signal];
+    TRACE("%s, id: %p, n=%d\n", __func__, thread, activeThread);
 }
 	
 - (void)main 
-{
-	
+{	
 	[self startLocalServerManager];
 	
-}
-	
-
-- (id)copyWithZone:(NSZone *)zone 
-{ 
-	return self; 
 }
 
 - (void)requestContains:(NSString *)request
