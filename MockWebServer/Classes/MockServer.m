@@ -16,6 +16,7 @@
 #import "Common_defs.h"
 #import "MockServer.h"
 #import "MockServerManager.h"
+#import "DispatchMap.h"
 //#import "NetworkService.h"
 //#import "WebCacheService.h"
 //#import "HTTPUrlHelper.h"
@@ -86,12 +87,12 @@ void sigpipe_handler(int sig)
 		needToDisplaySplash = YES;
 		connectedFD = fd;
 		self.serverManager = manager;
-        if (self.serverManager.requestHeaders != nil) {
-            self.headers = [[NSMutableDictionary alloc] initWithDictionary:self.serverManager.requestHeaders];
-        }
-        else {
-            self.headers = [[NSMutableDictionary alloc] init];
-        }
+//        if (self.serverManager.requestHeaders != nil) {
+//            self.headers = [[NSMutableDictionary alloc] initWithDictionary:self.serverManager.requestHeaders];
+//        }
+//        else {
+//            self.headers = [[NSMutableDictionary alloc] init];
+//        }
 	}
 	
 	return self;
@@ -150,10 +151,10 @@ void sigpipe_handler(int sig)
 					currentReadPtr++;
 					markIndex = currentReadPtr;
 					parserMode = SEARCH_REQUEST_FIELD;
-                    if (self.serverManager.requestString != nil &&
-                        [localRequest containsString:self.serverManager.requestString]) {
-                        TRACE("Request matched: %s from request=%s\n", [self.serverManager.requestString UTF8String], [localRequest UTF8String]);
+                    if ((self.dispatch = [self doesRequestMatch:localRequest]) != nil) {
+                        TRACE("Request matched: %s from request=%s\n", [self.dispatch.request UTF8String], [localRequest UTF8String]);
                         isRequestMatched = YES;
+                        self.headers = self.dispatch.requestHeaders;
                     }
 					TRACE(">>>>>> found request: %s\n", [localRequest UTF8String]);
 					isRequestValid = YES;
@@ -229,6 +230,11 @@ void sigpipe_handler(int sig)
 	return res;
 }
 
+- (Dispatch*)doesRequestMatch:(NSString*)request
+{
+    return [self.serverManager.dispatchMap dispatchForRequest:request];
+}
+
 - (void)resetConnection
 {
 	currentReadPtr = currentWritePtr = markIndex = 0;
@@ -240,11 +246,11 @@ void sigpipe_handler(int sig)
 	}
 }
 
-- (NSData*)constructHeader
+- (NSData*)constructHeader:(NSDictionary*)headers
 {
     NSMutableString *data = [[NSMutableString alloc] initWithUTF8String:Response200];
-    for (NSString *k in self.serverManager.responseHeaders.allKeys) {
-        NSString *v = [self.serverManager.responseHeaders objectForKey:k];
+    for (NSString *k in headers.allKeys) {
+        NSString *v = [headers objectForKey:k];
         
         if (v != nil) {
             NSString *field = [NSString stringWithFormat:@"\r\n%@: %@", k, v];
@@ -341,10 +347,10 @@ void sigpipe_handler(int sig)
             /**
              construct header based on user's template.
              */
-            if (isRequestMatched == YES || self.headers.count == 0) {
+            if (self.dispatch != nil) {
                 TRACE("Found matching request.");
-                header = [self constructHeader];
-                body = [self.serverManager.responseBody dataUsingEncoding:kCFStringEncodingUTF8];
+                header = [self constructHeader:self.dispatch.responseField];
+                body = [self.dispatch.responseString dataUsingEncoding:NSUTF8StringEncoding];
             }
             else if (isRequestValid == YES) {
                 TRACE("No matching request found.");

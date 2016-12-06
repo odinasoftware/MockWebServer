@@ -18,6 +18,7 @@
 
 #import "MockServer.h"
 #import "MockServerManager.h"
+#import "DispatchMap.h"
 
 #define MAX_LOCAL_SERVER_THREAD	1
 #define INTERRUPT_SIGNAL        2
@@ -27,9 +28,10 @@
 
 @implementation MockServerManager
 
-@synthesize requestString;
-@synthesize requestHeaders;
-@synthesize responseBody;
+//@synthesize requestString;
+//@synthesize requestHeaders;
+//@synthesize responseBody;
+@synthesize dispatchMap;
 
 - (id)init
 {
@@ -37,7 +39,7 @@
 		waitForThread = [[NSCondition alloc] init];
 		activeThread = 0;
         isListening = false;
-        self.requestHeaders = [[NSMutableDictionary alloc] init];
+//        self.requestHeaders = [[NSMutableDictionary alloc] init];
 	}
 	
 	return self;
@@ -163,37 +165,37 @@
 	
 }
 
-- (void)requestContains:(NSString *)request
-{
-    self.requestString = request;
-}
+//- (void)requestContains:(NSString *)request
+//{
+//    self.requestString = request;
+//}
+//
+//- (void)requestHeader:(NSString*)value forKey:(NSString*)key
+//{
+//    [self.requestHeaders setValue:value forKey:key];
+//}
+//
+//- (void)requestHeaders:(NSDictionary*)headers
+//{
+//    self.requestHeaders = [[NSMutableDictionary alloc] initWithDictionary:headers];
+//}
+//
+//- (void)responseBody:(NSString*)body
+//{
+//    self.responseBody = body;
+//}
+//
+//- (void)responseHeaders:(NSDictionary *)headers
+//{
+//    self.responseHeaders = headers;
+//}
+//
+//- (void)responseCode:(NSInteger)code
+//{
+//    self.responseCode = code;
+//}
 
-- (void)requestHeader:(NSString*)value forKey:(NSString*)key
-{
-    [self.requestHeaders setValue:value forKey:key];
-}
-
-- (void)requestHeaders:(NSDictionary*)headers
-{
-    self.requestHeaders = [[NSMutableDictionary alloc] initWithDictionary:headers];
-}
-
-- (void)responseBody:(NSString*)body
-{
-    self.responseBody = body;
-}
-
-- (void)responseHeaders:(NSDictionary *)headers
-{
-    self.responseHeaders = headers;
-}
-
-- (void)responseCode:(NSInteger)code
-{
-    self.responseCode = code;
-}
-
-- (void)responseBodyForBundle:(NSBundle*)bundle fileName:(NSString*)filename
+- (NSString*)responseBodyForBundle:(NSBundle*)bundle fileName:(NSString*)filename
 {
     NSString *name=nil, *ext=nil;
     
@@ -206,9 +208,15 @@
     TRACE("readFromBundFileName: name=%s, ext=%s", [name UTF8String], [ext UTF8String]);
     
     NSString *filePath = [bundle pathForResource:name ofType:ext];
-    self.responseBody = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-    TRACE("body from file=%s",[self.responseBody UTF8String]);
+    return [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+//    TRACE("body from file=%s",[self.responseBody UTF8String]);
     
 }
+
+- (void)setDispatch:(DispatchMap*)dispatch
+{
+    self.dispatchMap = dispatch;
+}
+
 
 @end

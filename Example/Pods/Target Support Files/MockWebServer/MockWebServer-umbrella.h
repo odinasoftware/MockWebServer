@@ -5,6 +5,7 @@
 
 #import "MockWebServer.h"
 #import "TestConditionWait.h"
+#import "DispatchMap.h"
 #import "MockServer.h"
 #import "MockServerManager.h"
 

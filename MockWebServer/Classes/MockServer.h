@@ -23,6 +23,7 @@ typedef enum {SEARCH_METHOD,
 @class WebCacheService;
 @class MockServerManager;
 @class HTTPUrlHelper;
+@class Dispatch;
 
 @interface MockServer : NSThread {
 	BOOL	stopIt;
@@ -46,11 +47,12 @@ typedef enum {SEARCH_METHOD,
 	unsigned char local_buffer[LOCAL_BUFFER_SIZE];
 }
 
-@property (nonatomic, retain)   MockServerManager   *serverManager;
-@property (assign) BOOL stopIt;
-@property (assign) BOOL isRequestValid;
-@property (nonatomic, retain) NSString *localRequest;
-@property (nonatomic, retain)   NSMutableDictionary        *headers;
+@property (nonatomic, retain)   MockServerManager       *serverManager;
+@property (assign)              BOOL                    stopIt;
+@property (assign)              BOOL                    isRequestValid;
+@property (nonatomic, retain)   NSString                *localRequest;
+@property (nonatomic, retain)   NSMutableDictionary     *headers;
+@property (nonatomic, retain)   Dispatch                *dispatch;
 
 - (id)initWithManager:(MockServerManager*)manager connFD:(int)fd;
 //- (void)startLocalServer;

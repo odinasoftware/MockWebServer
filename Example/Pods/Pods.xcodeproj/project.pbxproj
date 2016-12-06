@@ -61,6 +61,9 @@
 		778C9F1A1715E05313578E39AB46726E /* EXPMatchers+beInstanceOf.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5966F05CD1198629BF447653497239 /* EXPMatchers+beInstanceOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		79463C7EE3D79A4B46AAA160DE410521 /* SPTExample.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F820C46D336F1E6EB733BFC4374C51 /* SPTExample.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E81176499F06E523CE3039B08AB5051 /* EXPMatchers+beGreaterThan.h in Headers */ = {isa = PBXBuildFile; fileRef = B3BBEA8D0E2B46A33A73346032F24AAA /* EXPMatchers+beGreaterThan.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		804341701DF1021F0064EB4F /* DispatchMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 8043416E1DF1021F0064EB4F /* DispatchMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		804341711DF1021F0064EB4F /* DispatchMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 8043416F1DF1021F0064EB4F /* DispatchMap.m */; };
+		804341721DF65C390064EB4F /* DispatchMap.m in Headers */ = {isa = PBXBuildFile; fileRef = 8043416F1DF1021F0064EB4F /* DispatchMap.m */; };
 		80F107331DEC8DCB0059272D /* MockServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 80F1072D1DEC8DCB0059272D /* MockServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80F107341DEC8DCB0059272D /* MockServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 80F1072E1DEC8DCB0059272D /* MockServer.m */; };
 		80F107351DEC8DCB0059272D /* MockServerManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 80F1072F1DEC8DCB0059272D /* MockServerManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -228,6 +231,8 @@
 		7D23EA9CCB1E421678FACAC3D02921A8 /* SPTCallSite.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTCallSite.m; path = Specta/Specta/SPTCallSite.m; sourceTree = "<group>"; };
 		7ECE72AD43155832C505F13EE17792AC /* Expecta.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Expecta.modulemap; sourceTree = "<group>"; };
 		8002AEC214B6BB97F584715F86C953D0 /* SPTExcludeGlobalBeforeAfterEach.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPTExcludeGlobalBeforeAfterEach.h; path = Specta/Specta/SPTExcludeGlobalBeforeAfterEach.h; sourceTree = "<group>"; };
+		8043416E1DF1021F0064EB4F /* DispatchMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchMap.h; sourceTree = "<group>"; };
+		8043416F1DF1021F0064EB4F /* DispatchMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchMap.m; sourceTree = "<group>"; };
 		80F1072D1DEC8DCB0059272D /* MockServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockServer.h; sourceTree = "<group>"; };
 		80F1072E1DEC8DCB0059272D /* MockServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockServer.m; sourceTree = "<group>"; };
 		80F1072F1DEC8DCB0059272D /* MockServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockServerManager.h; sourceTree = "<group>"; };
@@ -368,6 +373,8 @@
 				80F107301DEC8DCB0059272D /* MockServerManager.m */,
 				80F107311DEC8DCB0059272D /* MockWebServer.h */,
 				80F107321DEC8DCB0059272D /* Common_defs.h */,
+				8043416E1DF1021F0064EB4F /* DispatchMap.h */,
+				8043416F1DF1021F0064EB4F /* DispatchMap.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -745,8 +752,10 @@
 				80F107381DEC8DCB0059272D /* Common_defs.h in Headers */,
 				80F1073C1DEC8DEC0059272D /* TestConditionWait.h in Headers */,
 				80F107371DEC8DCB0059272D /* MockWebServer.h in Headers */,
+				804341701DF1021F0064EB4F /* DispatchMap.h in Headers */,
 				80F107331DEC8DCB0059272D /* MockServer.h in Headers */,
 				80F107351DEC8DCB0059272D /* MockServerManager.h in Headers */,
+				804341721DF65C390064EB4F /* DispatchMap.m in Headers */,
 				1A6C834963D1EEC90E877B3D192119B7 /* MockWebServer-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -907,6 +916,7 @@
 				80F107361DEC8DCB0059272D /* MockServerManager.m in Sources */,
 				80F1073B1DEC8DEC0059272D /* TestConditionWait.m in Sources */,
 				80F107341DEC8DCB0059272D /* MockServer.m in Sources */,
+				804341711DF1021F0064EB4F /* DispatchMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

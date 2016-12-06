@@ -11,6 +11,7 @@
 #define DEFAULT_BUNDLE [NSBundle bundleForClass:[self class]]
 
 @class MockServer;
+@class DispatchMap;
 
 @interface MockServerManager : NSThread {
 	NSInteger	activeThread;
@@ -20,11 +21,12 @@
     int         listenfd;
 }
 
-@property(nonatomic, retain)    NSString        *requestString;
-@property(nonatomic, retain)    NSMutableDictionary    *requestHeaders;
-@property(nonatomic, retain)    NSString        *responseBody;
-@property(nonatomic, retain)    NSDictionary    *responseHeaders;
-@property(nonatomic)            NSInteger       responseCode;
+//@property(nonatomic, retain)    NSString        *requestString;
+//@property(nonatomic, retain)    NSMutableDictionary    *requestHeaders;
+//@property(nonatomic, retain)    NSString        *responseBody;
+//@property(nonatomic, retain)    NSDictionary    *responseHeaders;
+//@property(nonatomic)            NSInteger       responseCode;
+@property(nonatomic, retain)    DispatchMap     *dispatchMap;
 
 - (void)startAndWait;
 - (void)stop;
@@ -36,6 +38,6 @@
 - (void)responseHeaders:(NSDictionary*)headers;
 - (void)responseBody:(NSString*)body;
 - (void)responseCode:(NSInteger)code;
-- (void)responseBodyForBundle:(NSBundle*)bundle fileName:(NSString*)filename;
-
+- (NSString*)responseBodyForBundle:(NSBundle*)bundle fileName:(NSString*)filename;
+- (void)setDispatch:(DispatchMap*)dispatch;
 @end
