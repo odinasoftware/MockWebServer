@@ -45,12 +45,12 @@
 	return self;
 }
 
-- (void)startAndWait
+- (void)startServer
 {
     [self start];
     
     [waitForThread lock];
-    while (isListening == false) {
+    while (isListening == false && isStopped == NO) {
         TRACE("%s, waiting for listening thread.\n", __func__);
         [waitForThread wait];
     }
@@ -71,85 +71,91 @@
 	//TRACE("%s, ttl: %d\n", __func__, ttl);
     
     self->listenfd = -1;
+    self->isStopped = NO;
 	
-    for (;;) {
-        listenfd = socket(AF_INET, SOCK_STREAM, 0);
-		
-        bzero(&servaddr, sizeof(servaddr));
-        servaddr.sin_family = AF_INET;
-        servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-        servaddr.sin_port = htons(LOCAL_PORT);
-        setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-        if (bind(listenfd, (const struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
-            NSLog(@"%s: %s", __func__, strerror(errno));
-            return;
-        }
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
+    
+    bzero(&servaddr, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(LOCAL_PORT);
+    setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    if (bind(listenfd, (const struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
+        NSLog(@"%s: bind error=%s", __func__, strerror(errno));
         
-        
-        if (listen(listenfd, LISTENQ) < 0) {
-            NSLog(@"%s: %s", __func__, strerror(errno));
-            return;
-        }
-        
-        [waitForThread lock];
-        isListening = true;
-        [waitForThread broadcast];
-        [waitForThread unlock];
-        
-        do {
-            @try {
-                              
-                TRACE("~~~~ before accept ~~~~~~\n");
-                if ((connfd = accept(listenfd, (struct sockaddr*)&cliaddr, &clilen)) < 0) {
-                    if (errno == EINTR)
-                        continue;
-                    else {
-                        NSLog(@"%s, accept error: %s", __func__, strerror(errno));
-                        get_new_socket = YES;
-                        continue;
-                    }
-                }
-                
-                TRACE("LocalServer, accepting connection: %d\n", connfd);
-                //setsockopt(connfd, SOL_SOCKET, SO_LINGER, &l_onoff, sizeof(l_onoff));
-                if (setsockopt(connfd, IPPROTO_TCP, TCP_NODELAY, &onoff, sizeof(onoff)) < 0) {
-                    NSLog(@"%s, failed to set nodelay. %s", __func__, strerror(errno));
-                }
-                         
-                MockServer *server = [[MockServer alloc] initWithManager:self connFD:connfd];
-                TRACE("Starting thread: %p\n", server);
-                [server start];
-
-                if (++activeThread >= MAX_LOCAL_SERVER_THREAD) {
-                    [waitForThread lock];
-                    TRACE("%s, waiting for available thread.\n", __func__);
-                    [waitForThread wait];
-                    [waitForThread unlock];
-                    TRACE("%s, thread is available.\n", __func__);
-                }
-                
-            } @catch (NSException *exception) {
-                NSLog(@"%s: main: %@: %@", __func__, [exception name], [exception reason]);
-            }
-        } while (get_new_socket == NO && self->isStopped == NO);
-        
-        if (self->isStopped == YES) {
-            TRACE("Listening thread exiting.\n");
-            return;
-        }
-        close(listenfd);
-        NSLog(@"Close %d and restart socket.\n", listenfd);
-        get_new_socket = NO;
-        
+        isStopped = YES;
+        return;
     }
+    
+    
+    if (listen(listenfd, LISTENQ) < 0) {
+        NSLog(@"%s: listen error=%s", __func__, strerror(errno));
+        
+        isStopped = YES;
+        
+        return;
+    }
+    
+    [waitForThread lock];
+    isListening = true;
+    [waitForThread broadcast];
+    [waitForThread unlock];
+    
+    do {
+        @try {
+            
+            TRACE("~~~~ before accept ~~~~~~\n");
+            if ((connfd = accept(listenfd, (struct sockaddr*)&cliaddr, &clilen)) < 0) {
+                if (errno == EINTR)
+                    continue;
+                else {
+                    NSLog(@"%s, accept error: %s", __func__, strerror(errno));
+                    get_new_socket = YES;
+                    continue;
+                }
+            }
+            
+            TRACE("LocalServer, accepting connection: %d from listening %d\n", connfd, listenfd);
+            //setsockopt(connfd, SOL_SOCKET, SO_LINGER, &l_onoff, sizeof(l_onoff));
+            if (setsockopt(connfd, IPPROTO_TCP, TCP_NODELAY, &onoff, sizeof(onoff)) < 0) {
+                NSLog(@"%s, failed to set nodelay. %s", __func__, strerror(errno));
+            }
+            
+            MockServer *server = [[MockServer alloc] initWithManager:self connFD:connfd];
+            TRACE("Starting thread: %p\n", server);
+            [server start];
+            
+            if (++activeThread >= MAX_LOCAL_SERVER_THREAD) {
+                [waitForThread lock];
+                TRACE("%s, waiting for available thread.\n", __func__);
+                [waitForThread wait];
+                [waitForThread unlock];
+                TRACE("%s, thread is available.\n", __func__);
+            }
+            
+        } @catch (NSException *exception) {
+            NSLog(@"%s: main: %@: %@", __func__, [exception name], [exception reason]);
+        }
+    } while (get_new_socket == NO && self->isStopped == NO);
+    
+    if (self->isStopped == YES) {
+        TRACE("Listening thread exiting.\n");
+        return;
+    }
+    shutdown(listenfd, SHUT_RDWR);
+    close(listenfd);
+    NSLog(@"Close %d socket.\n", listenfd);
+    get_new_socket = NO;
 	
 }
 
-- (void)stop
+- (void)stopServer
 {
-    self->isStopped = YES;
+    shutdown(self->listenfd, SHUT_RDWR);
     close(self->listenfd);
-    TRACE("Stop=%d", self->listenfd);
+    self.dispatchMap = nil;
+    
+    TRACE("%s=%d", __func__, self->listenfd);
 }
 
 - (void)exitConnThread:(id)thread
@@ -194,24 +200,6 @@
 //{
 //    self.responseCode = code;
 //}
-
-- (NSString*)responseBodyForBundle:(NSBundle*)bundle fileName:(NSString*)filename
-{
-    NSString *name=nil, *ext=nil;
-    
-    NSRange range = [filename rangeOfString:@"."];
-    if (range.location != NSNotFound) {
-        name = [filename substringToIndex:range.location];
-        ext = [filename substringFromIndex:range.location+1];
-    }
-    
-    TRACE("readFromBundFileName: name=%s, ext=%s", [name UTF8String], [ext UTF8String]);
-    
-    NSString *filePath = [bundle pathForResource:name ofType:ext];
-    return [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-//    TRACE("body from file=%s",[self.responseBody UTF8String]);
-    
-}
 
 - (void)setDispatch:(DispatchMap*)dispatch
 {

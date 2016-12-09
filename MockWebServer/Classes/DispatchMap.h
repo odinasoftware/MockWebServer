@@ -24,6 +24,8 @@
 - (void)responseFromFile:(NSString*)name;
 - (void)responseHeaders:(NSDictionary*)dict;
 - (void)requestHeaders:(NSDictionary*)dict;
+- (NSString*)responseBodyForBundle:(NSBundle*)bundle fromFile:(NSString*)file;
+
 
 @end
 

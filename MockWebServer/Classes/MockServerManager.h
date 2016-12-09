@@ -28,8 +28,8 @@
 //@property(nonatomic)            NSInteger       responseCode;
 @property(nonatomic, retain)    DispatchMap     *dispatchMap;
 
-- (void)startAndWait;
-- (void)stop;
+- (void)startServer;
+- (void)stopServer;
 - (void)startLocalServerManager;
 - (void)exitConnThread:(id)thread;
 - (void)requestContains:(NSString*)request;
@@ -38,6 +38,5 @@
 - (void)responseHeaders:(NSDictionary*)headers;
 - (void)responseBody:(NSString*)body;
 - (void)responseCode:(NSInteger)code;
-- (NSString*)responseBodyForBundle:(NSBundle*)bundle fileName:(NSString*)filename;
 - (void)setDispatch:(DispatchMap*)dispatch;
 @end

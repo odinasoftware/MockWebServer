@@ -10,10 +10,24 @@
 
 SpecBegin(InitialSpecs)
 
+
 describe(@"Mock server test with string", ^{
     
+    __block MockServerManager *manager = nil;
+    
+    beforeEach(^{
+        // This is run before each example.
+        manager = [[MockServerManager alloc] init];
+        [manager startServer];
+    });
+    
+    afterEach(^{
+        // This is run after each example.
+        [manager stopServer];
+    });
+
+    
     it(@"will succeeded", ^{
-        MockServerManager *manager = [[MockServerManager alloc] init];
         
         DispatchMap *dispatchMap = [[DispatchMap alloc] init];
         Dispatch *dispatch = [[Dispatch alloc] init];
@@ -23,9 +37,6 @@ describe(@"Mock server test with string", ^{
         [dispatch responseHeaders:@{@"Accept-encoding": @"*.*"}];
         [dispatchMap addDispatch:dispatch];
         [manager setDispatch:dispatchMap];
-        
-        // TODO: need to start local server in thread.
-        [manager startAndWait];
         
         NSString *dataUrl = @"http://127.0.0.1:9000/test";
         NSURL *url = [NSURL URLWithString:dataUrl];
@@ -38,68 +49,104 @@ describe(@"Mock server test with string", ^{
                                               
                                               XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
                                               done();
-                                              [manager stop];
+                                             
                                           }];
             
             // 3
             [test resume];
         });
     });
+    
+    it(@"will fail", ^{
+        MockServerManager *manager = [[MockServerManager alloc] init];
+        
+        DispatchMap *dispatchMap = [[DispatchMap alloc] init];
+        Dispatch *dispatch = [[Dispatch alloc] init];
+        [dispatch requestContainString:@"test1"];
+        [dispatch setResponseCode:200];
+        [dispatch responseBodyForBundle:DEFAULT_BUNDLE fromFile:@"response.json"];
+        [dispatch responseHeaders:@{@"Accept-encoding": @"*.*"}];
+        [dispatchMap addDispatch:dispatch];
+        [manager setDispatch:dispatchMap];
+        
+        
+        NSString *dataUrl = @"http://127.0.0.1:9000/test1";
+        NSURL *url = [NSURL URLWithString:dataUrl];
+        
+        waitUntil(^(DoneCallback done) {
+            NSURLSessionDataTask *test = [[NSURLSession sharedSession]
+                                          dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                              // 4: Handle response here
+                                              NSLog(@"data=%@", [NSString stringWithUTF8String:[data bytes]]);
+                                              
+                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
+                                              done();
+                                           
+                                          }];
+            
+            // 3
+            [test resume];
+        });
+    });
+    
+    it(@"Mulitpe request example", ^{
+        DispatchMap *dispatchMap = [[DispatchMap alloc] init];
+        Dispatch *dispatch = [[Dispatch alloc] init];
+        [dispatch requestContainString:@"test1"];
+        [dispatch setResponseCode:200];
+        [dispatch responseString:@"test"];
+        [dispatch responseHeaders:@{@"Accept-encoding": @"*.*"}];
+        [dispatchMap addDispatch:dispatch];
+        
+        dispatch = [[Dispatch alloc] init];
+        [dispatch requestContainString:@"test2"];
+        [dispatch setResponseCode:200];
+        [dispatch responseBodyForBundle:DEFAULT_BUNDLE fromFile:@"response.json"];
+        [dispatch responseHeaders:@{@"Accept-encoding": @"*.*"}];
+        [dispatchMap addDispatch:dispatch];
+        
+        [manager setDispatch:dispatchMap];
+        
+        NSString *dataUrl = @"http://127.0.0.1:9000/test1";
+        NSURL *url = [NSURL URLWithString:dataUrl];
+        
+        waitUntil(^(DoneCallback done) {
+            NSURLSessionDataTask *test = [[NSURLSession sharedSession]
+                                          dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                              // 4: Handle response here
+                                              NSLog(@"data=%@", [NSString stringWithUTF8String:[data bytes]]);
+                                              
+                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
+                                              done();
+                                              
+                                          }];
+            
+            // 3
+            [test resume];
+        });
+        
+        dataUrl = @"http://127.0.0.1:9000/test2";
+        url = [NSURL URLWithString:dataUrl];
+        
+        waitUntil(^(DoneCallback done) {
+            NSURLSessionDataTask *test = [[NSURLSession sharedSession]
+                                          dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                              // 4: Handle response here
+                                              NSLog(@"data=%@", [NSString stringWithUTF8String:[data bytes]]);
+                                              
+                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
+                                              done();
+                                     
+                                          }];
+            
+            // 3
+            [test resume];
+        });
+
+        
+    });
+
 });
 
-//describe(@"Mock server test with file", ^{
-//    
-//    
-//    it(@"will fail", ^{
-//        MockServerManager *manager = [[MockServerManager alloc] init];
-//        [manager requestContains:@"test1"];
-//        [manager requestHeader:@"none" forKey:@"content-encoding"];
-//        [manager responseCode:200];
-//        [manager responseHeaders:@{@"Accept-encoding": @"*.*"}];
-//        [manager responseBodyForBundle:DEFAULT_BUNDLE fileName:@"response.json"];
-//        
-//        // TODO: need to start local server in thread.
-//        [manager startAndWait];
-//        
-//        NSString *dataUrl = @"http://127.0.0.1:9000/test1";
-//        NSURL *url = [NSURL URLWithString:dataUrl];
-//        
-//        waitUntil(^(DoneCallback done) {
-//            NSURLSessionDataTask *test = [[NSURLSession sharedSession]
-//                                          dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//                                              // 4: Handle response here
-//                                              NSLog(@"data=%@", [NSString stringWithUTF8String:[data bytes]]);
-//                                              
-//                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
-//                                              done();
-//                                              [manager stop];
-//                                          }];
-//            
-//            // 3
-//            [test resume];
-//        });
-//    });
-//});
-//
-//describe(@"Mock server test with multiple requests", ^ {
-//    MockServerManager *manager = [[MockServerManager alloc] init];
-//    [manager requestContains:@"test1"];
-//    [manager requestHeader:@"none" forKey:@"content-encoding"];
-//    [manager responseCode:200];
-//    [manager responseHeaders:@{@"Accept-encoding": @"*.*"}];
-//    [manager responseBodyForBundle:DEFAULT_BUNDLE fileName:@"response.json"];
-//    
-//    // TODO: need to start local server in thread.
-//    [manager startAndWait];
-//
-//    it(@"will success. This is the first request", ^{
-//        NSString *dataUrl = @"http://127.0.0.1:9000/test1";
-//    });
-//    
-//    it(@"will success. This is the second request", ^{
-//        NSString *dataUrl = @"http://127.0.0.1:9000/test2";
-//    });
-//});
-//
 SpecEnd
 

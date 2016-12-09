@@ -7,6 +7,7 @@
 //
 
 #import "DispatchMap.h"
+#import "Common_defs.h"
 
 @implementation Dispatch
 
@@ -53,6 +54,22 @@
 - (void)requestHeaders:(NSDictionary*)dict
 {
     self.requestHeaders = dict;
+}
+
+- (NSString*)responseBodyForBundle:(NSBundle*)bundle fromFile:(NSString*)file
+{
+    NSString *name=nil, *ext=nil;
+    
+    NSRange range = [file rangeOfString:@"."];
+    if (range.location != NSNotFound) {
+        name = [file substringToIndex:range.location];
+        ext = [file substringFromIndex:range.location+1];
+    }
+    
+    TRACE("responseBodyForBundle: name=%s, ext=%s", [name UTF8String], [ext UTF8String]);
+    
+    NSString *filePath = [bundle pathForResource:name ofType:ext];
+    return self.responseString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
 }
 
 @end
