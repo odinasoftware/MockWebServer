@@ -58,7 +58,6 @@ describe(@"Mock server test with string", ^{
     });
     
     it(@"will fail", ^{
-        MockServerManager *manager = [[MockServerManager alloc] init];
         
         DispatchMap *dispatchMap = [[DispatchMap alloc] init];
         Dispatch *dispatch = [[Dispatch alloc] init];
@@ -92,14 +91,14 @@ describe(@"Mock server test with string", ^{
     it(@"Mulitpe request example", ^{
         DispatchMap *dispatchMap = [[DispatchMap alloc] init];
         Dispatch *dispatch = [[Dispatch alloc] init];
-        [dispatch requestContainString:@"test1"];
+        [dispatch requestContainString:@"test2"];
         [dispatch setResponseCode:200];
         [dispatch responseString:@"test"];
         [dispatch responseHeaders:@{@"Accept-encoding": @"*.*"}];
         [dispatchMap addDispatch:dispatch];
         
         dispatch = [[Dispatch alloc] init];
-        [dispatch requestContainString:@"test2"];
+        [dispatch requestContainString:@"test3"];
         [dispatch setResponseCode:200];
         [dispatch responseBodyForBundle:DEFAULT_BUNDLE fromFile:@"response.json"];
         [dispatch responseHeaders:@{@"Accept-encoding": @"*.*"}];
@@ -107,7 +106,7 @@ describe(@"Mock server test with string", ^{
         
         [manager setDispatch:dispatchMap];
         
-        NSString *dataUrl = @"http://127.0.0.1:9000/test1";
+        NSString *dataUrl = @"http://127.0.0.1:9000/test2";
         NSURL *url = [NSURL URLWithString:dataUrl];
         
         waitUntil(^(DoneCallback done) {
@@ -125,7 +124,7 @@ describe(@"Mock server test with string", ^{
             [test resume];
         });
         
-        dataUrl = @"http://127.0.0.1:9000/test2";
+        dataUrl = @"http://127.0.0.1:9000/test3";
         url = [NSURL URLWithString:dataUrl];
         
         waitUntil(^(DoneCallback done) {
