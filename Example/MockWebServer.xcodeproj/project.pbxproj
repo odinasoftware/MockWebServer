@@ -21,6 +21,7 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		804341751DFC86710064EB4F /* TestMockServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 804341731DFC85050064EB4F /* TestMockServer.m */; };
 		80F107431DED2A760059272D /* response.json in Resources */ = {isa = PBXBuildFile; fileRef = 80F107421DED2A760059272D /* response.json */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		EF25937A852AC9297D2799E3 /* Pods_MockWebServer_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15FB4706B132E1169E9EDD86 /* Pods_MockWebServer_Example.framework */; };
@@ -60,6 +61,7 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		6C243CA643826F5725B0029C /* Pods-MockWebServer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockWebServer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MockWebServer_Tests/Pods-MockWebServer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		79BEF8C1DD9C729CE035D94E /* MockWebServer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MockWebServer.podspec; path = ../MockWebServer.podspec; sourceTree = "<group>"; };
+		804341731DFC85050064EB4F /* TestMockServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestMockServer.m; sourceTree = "<group>"; };
 		80F107421DED2A760059272D /* response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response.json; sourceTree = "<group>"; };
 		82C00F342B85213D1C8294F4 /* Pods-MockWebServer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockWebServer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MockWebServer_Tests/Pods-MockWebServer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				804341731DFC85050064EB4F /* TestMockServer.m */,
 				80F107421DED2A760059272D /* response.json */,
 				6003F5BB195388D20070C39A /* Tests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
@@ -404,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				804341751DFC86710064EB4F /* TestMockServer.m in Sources */,
 				6003F5BC195388D20070C39A /* Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

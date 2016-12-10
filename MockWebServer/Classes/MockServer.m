@@ -73,7 +73,7 @@ void sigpipe_handler(int sig)
 	return self;
 }
 
-- (id)initWithManager:(MockServerManager*)manager connFD:(int)fd
+- (id)initWithManager:(MockWebServer*)manager connFD:(int)fd
 {
 	if ((self = [super init])) {
 		currentReadPtr = currentWritePtr = markIndex = 0;

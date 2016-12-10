@@ -13,7 +13,7 @@
 @class MockServer;
 @class DispatchMap;
 
-@interface MockServerManager : NSThread {
+@interface MockWebServer : NSThread {
 	NSInteger	activeThread;
 	NSCondition	*waitForThread;
     BOOL        isListening;
@@ -21,11 +21,6 @@
     int         listenfd;
 }
 
-//@property(nonatomic, retain)    NSString        *requestString;
-//@property(nonatomic, retain)    NSMutableDictionary    *requestHeaders;
-//@property(nonatomic, retain)    NSString        *responseBody;
-//@property(nonatomic, retain)    NSDictionary    *responseHeaders;
-//@property(nonatomic)            NSInteger       responseCode;
 @property(nonatomic, retain)    DispatchMap     *dispatchMap;
 
 - (void)startServer;

@@ -26,7 +26,7 @@
 #define LISTENQ					32
 
 
-@implementation MockServerManager
+@implementation MockWebServer
 
 //@synthesize requestString;
 //@synthesize requestHeaders;
@@ -170,36 +170,6 @@
 	[self startLocalServerManager];
 	
 }
-
-//- (void)requestContains:(NSString *)request
-//{
-//    self.requestString = request;
-//}
-//
-//- (void)requestHeader:(NSString*)value forKey:(NSString*)key
-//{
-//    [self.requestHeaders setValue:value forKey:key];
-//}
-//
-//- (void)requestHeaders:(NSDictionary*)headers
-//{
-//    self.requestHeaders = [[NSMutableDictionary alloc] initWithDictionary:headers];
-//}
-//
-//- (void)responseBody:(NSString*)body
-//{
-//    self.responseBody = body;
-//}
-//
-//- (void)responseHeaders:(NSDictionary *)headers
-//{
-//    self.responseHeaders = headers;
-//}
-//
-//- (void)responseCode:(NSInteger)code
-//{
-//    self.responseCode = code;
-//}
 
 - (void)setDispatch:(DispatchMap*)dispatch
 {

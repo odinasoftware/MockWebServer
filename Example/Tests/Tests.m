@@ -13,11 +13,11 @@ SpecBegin(InitialSpecs)
 
 describe(@"Mock server test with string", ^{
     
-    __block MockServerManager *manager = nil;
+    __block MockWebServer *manager = nil;
     
     beforeEach(^{
         // This is run before each example.
-        manager = [[MockServerManager alloc] init];
+        manager = [[MockWebServer alloc] init];
         [manager startServer];
     });
     
