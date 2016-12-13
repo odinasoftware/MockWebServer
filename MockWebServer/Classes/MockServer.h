@@ -3,7 +3,7 @@
 //  NYTReader
 //
 //  Created by Jae Han on 9/21/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
+//  Copyright © 2016 Jae Han. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -21,7 +21,7 @@ typedef enum {SEARCH_METHOD,
 
 @class NetworkService;
 @class WebCacheService;
-@class MockWebServer;
+@class MockWebServerManager;
 @class HTTPUrlHelper;
 @class Dispatch;
 
@@ -47,14 +47,14 @@ typedef enum {SEARCH_METHOD,
 	unsigned char local_buffer[LOCAL_BUFFER_SIZE];
 }
 
-@property (nonatomic, retain)   MockWebServer           *serverManager;
+@property (nonatomic, retain)   MockWebServerManager    *serverManager;
 @property (assign)              BOOL                    stopIt;
 @property (assign)              BOOL                    isRequestValid;
 @property (nonatomic, retain)   NSString                *localRequest;
 @property (nonatomic, retain)   NSMutableDictionary     *headers;
 @property (nonatomic, retain)   Dispatch                *dispatch;
 
-- (id)initWithManager:(MockWebServer*)manager connFD:(int)fd;
+- (id)initWithManager:(MockWebServerManager*)manager connFD:(int)fd;
 //- (void)startLocalServer;
 - (void)stopLocalServer;
 - (BOOL)readFromConnection:(int)connfd;

@@ -23,13 +23,13 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     mockWebServer = [[MockWebServer alloc] init];
-    [mockWebServer startServer];
+    [mockWebServer start];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-    [mockWebServer stopServer];
+    [mockWebServer stop];
 }
 
 - (void)testExample {

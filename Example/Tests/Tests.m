@@ -18,12 +18,12 @@ describe(@"Mock server test with string", ^{
     beforeEach(^{
         // This is run before each example.
         manager = [[MockWebServer alloc] init];
-        [manager startServer];
+        [manager start];
     });
     
     afterEach(^{
         // This is run after each example.
-        [manager stopServer];
+        [manager stop];
     });
 
     

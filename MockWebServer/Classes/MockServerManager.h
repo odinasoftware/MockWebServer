@@ -1,9 +1,9 @@
 //
 //  LocalServerManager.h
-//  BBCReader
+//
 //
 //  Created by Jae Han on 12/29/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
+//  Copyright © 2016 Jae Han. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,25 +13,15 @@
 @class MockServer;
 @class DispatchMap;
 
-@interface MockWebServer : NSThread {
-	NSInteger	activeThread;
-	NSCondition	*waitForThread;
-    BOOL        isListening;
-    BOOL        isStopped;
-    int         listenfd;
-}
+@interface MockWebServerManager : NSThread
 
-@property(nonatomic, retain)    DispatchMap     *dispatchMap;
+@property(nonatomic, readonly)    DispatchMap     *dispatchMap;
+@end
 
-- (void)startServer;
-- (void)stopServer;
-- (void)startLocalServerManager;
-- (void)exitConnThread:(id)thread;
-- (void)requestContains:(NSString*)request;
-- (void)requestHeader:(NSString*)value forKey:(NSString*)key;
-- (void)requestHeaders:(NSDictionary*)headers;
-- (void)responseHeaders:(NSDictionary*)headers;
-- (void)responseBody:(NSString*)body;
-- (void)responseCode:(NSInteger)code;
+@interface MockWebServer : NSObject
+
+- (void)start;
+- (void)stop;
+
 - (void)setDispatch:(DispatchMap*)dispatch;
 @end

@@ -3,7 +3,7 @@
 //  Pods
 //
 //  Created by Jae Han on 12/1/16.
-//
+//  Copyright © 2016 Jae Han. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

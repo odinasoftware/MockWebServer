@@ -1,9 +1,9 @@
 //
 //  LocalServerManager.m
-//  BBCReader
+//  
 //
 //  Created by Jae Han on 12/29/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
+//  Copyright © 2016 Jae Han. All rights reserved.
 //
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -26,11 +26,26 @@
 #define LISTENQ					32
 
 
-@implementation MockWebServer
+@interface MockWebServerManager() {
+    NSInteger	activeThread;
+    NSCondition	*waitForThread;
+    BOOL        isListening;
+    BOOL        isStopped;
+    int         listenfd;
+}
 
-//@synthesize requestString;
-//@synthesize requestHeaders;
-//@synthesize responseBody;
+
+- (void)startServer;
+- (void)stopServer;
+- (void)startLocalServerManager;
+- (void)exitConnThread:(id)thread;
+
+- (void)setDispatch:(DispatchMap*)dispatch;
+
+@end
+
+@implementation MockWebServerManager
+
 @synthesize dispatchMap;
 
 - (id)init
@@ -153,7 +168,7 @@
 {
     shutdown(self->listenfd, SHUT_RDWR);
     close(self->listenfd);
-    self.dispatchMap = nil;
+    self->dispatchMap = nil;
     
     TRACE("%s=%d", __func__, self->listenfd);
 }
@@ -173,8 +188,41 @@
 
 - (void)setDispatch:(DispatchMap*)dispatch
 {
-    self.dispatchMap = dispatch;
+    self->dispatchMap = dispatch;
 }
 
+@end
+
+@interface MockWebServer()
+
+@property(nonatomic, retain)    MockWebServerManager    *mockServerManager;
+@end
+
+@implementation MockWebServer
+@synthesize mockServerManager;
+
+- (id)init
+{
+    if ((self = [super init])) {
+        self.mockServerManager = [[MockWebServerManager alloc] init];
+    }
+    
+    return self;
+}
+
+- (void)start
+{
+    [self.mockServerManager startServer];
+}
+
+- (void)stop
+{
+    [self.mockServerManager stopServer];
+}
+
+- (void)setDispatch:(DispatchMap *)dispatch
+{
+    [self.mockServerManager setDispatch:dispatch];
+}
 
 @end

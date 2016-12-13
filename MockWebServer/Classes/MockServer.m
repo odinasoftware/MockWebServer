@@ -3,7 +3,7 @@
 //  NYTReader
 //
 //  Created by Jae Han on 9/21/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
+//  Copyright © 2016 Jae Han. All rights reserved.
 //
 //#define _DEBUG 
 #include <sys/socket.h>
@@ -49,6 +49,10 @@ void sigpipe_handler(int sig)
 	broken_pipe_count++;
 }
 
+@interface MockWebServerManager()
+- (void)exitConnThread:(id)thread;
+@end
+
 @implementation MockServer
 
 @synthesize stopIt;
@@ -73,7 +77,7 @@ void sigpipe_handler(int sig)
 	return self;
 }
 
-- (id)initWithManager:(MockWebServer*)manager connFD:(int)fd
+- (id)initWithManager:(MockWebServerManager*)manager connFD:(int)fd
 {
 	if ((self = [super init])) {
 		currentReadPtr = currentWritePtr = markIndex = 0;
