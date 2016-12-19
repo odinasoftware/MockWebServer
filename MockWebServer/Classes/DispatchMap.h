@@ -17,14 +17,14 @@
 @property(nonatomic, retain)    NSDictionary    *responseField;
 @property(nonatomic, retain)    NSDictionary    *requestHeaders;
 
-- (void)requestContainString:(NSString*)string;
-- (void)responseString:(NSString*)string;
-- (void)setResponseCode:(int)code;
-- (void)addResponseField:(NSString*)field value:(NSString*)value;
-- (void)responseFromFile:(NSString*)name;
-- (void)responseHeaders:(NSDictionary*)dict;
-- (void)requestHeaders:(NSDictionary*)dict;
-- (NSString*)responseBodyForBundle:(NSBundle*)bundle fromFile:(NSString*)file;
+- (Dispatch*)requestContainString:(NSString*)string;
+- (Dispatch*)responseString:(NSString*)string;
+- (Dispatch*)setResponseCode:(int)code;
+- (Dispatch*)addResponseField:(NSString*)field value:(NSString*)value;
+- (Dispatch*)responseFromFile:(NSString*)name;
+- (Dispatch*)responseHeaders:(NSDictionary*)dict;
+- (Dispatch*)requestHeaders:(NSDictionary*)dict;
+- (Dispatch*)responseBodyForBundle:(NSBundle*)bundle fromFile:(NSString*)file;
 
 
 @end

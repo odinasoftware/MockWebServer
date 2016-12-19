@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "Common_defs.h"
 #import "TestConditionWait.h"
 
 @implementation TestConditionWait
@@ -38,6 +38,7 @@
     [_waitCondition lock];
     [_waitCondition wait];
     [_waitCondition unlock];
+    TRACE("%s: waken up.", __func__);
 }
 
 - (void)wakeup

@@ -78,7 +78,7 @@ describe(@"Mock server test with string", ^{
                                               // 4: Handle response here
                                               NSLog(@"data=%@", [NSString stringWithUTF8String:[data bytes]]);
                                               
-                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
+                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]!=0, @"Body doesn't match.");
                                               done();
                                            
                                           }];
@@ -133,7 +133,7 @@ describe(@"Mock server test with string", ^{
                                               // 4: Handle response here
                                               NSLog(@"data=%@", [NSString stringWithUTF8String:[data bytes]]);
                                               
-                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"Body doesn't match.");
+                                              XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]!=0, @"Body doesn't match.");
                                               done();
                                      
                                           }];

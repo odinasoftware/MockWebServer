@@ -18,45 +18,52 @@
 @synthesize responseField;
 @synthesize requestHeaders;
 
-- (void)requestContainString:(NSString*)string
+- (Dispatch*)requestContainString:(NSString*)string
 {
     self.request = string;
+    return self;
 }
 
-- (void)responseString:(NSString*)string
+- (Dispatch*)responseString:(NSString*)string
 {
     self.responseString = string;
+    return self;
 }
 
-- (void)setResponseCode:(int)code
+- (Dispatch*)setResponseCode:(int)code
 {
     self.code = code;
+    return self;
 }
 
-- (void)addResponseField:(NSString*)field value:(NSString*)value
+- (Dispatch*)addResponseField:(NSString*)field value:(NSString*)value
 {
     if (self.responseField == nil) {
         self.responseField = [[NSMutableDictionary alloc] init];
     }
     [self.responseField setValue:value forKey:field];
+    return self;
 }
 
-- (void)responseFromFile:(NSString*)name
+- (Dispatch*)responseFromFile:(NSString*)name
 {
     self.fileName = name;
+    return self;
 }
 
-- (void)responseHeaders:(NSDictionary *)dict
+- (Dispatch*)responseHeaders:(NSDictionary *)dict
 {
     self.responseField = dict;
+    return self;
 }
 
-- (void)requestHeaders:(NSDictionary*)dict
+- (Dispatch*)requestHeaders:(NSDictionary*)dict
 {
     self.requestHeaders = dict;
+    return self;
 }
 
-- (NSString*)responseBodyForBundle:(NSBundle*)bundle fromFile:(NSString*)file
+- (Dispatch*)responseBodyForBundle:(NSBundle*)bundle fromFile:(NSString*)file
 {
     NSString *name=nil, *ext=nil;
     
@@ -69,7 +76,8 @@
     TRACE("responseBodyForBundle: name=%s, ext=%s", [name UTF8String], [ext UTF8String]);
     
     NSString *filePath = [bundle pathForResource:name ofType:ext];
-    return self.responseString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    self.responseString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    return self;
 }
 
 @end
