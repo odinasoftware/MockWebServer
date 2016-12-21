@@ -23,8 +23,6 @@
 #define LINE_FEED			0x0a
 #define CHUNKED_SIZE		1500
 
-static NSTimeInterval LOCAL_SERVER_CONNECTION_TIMEOUT = 5.0;
-
 static const char *Response200 = "HTTP/1.1 200 OK";
 static const char *Response404 = "HTTP/1.1 404 Not Found";
 static const char *Response500 = "HTTP/1.1 500 Internal Server Error";
@@ -149,7 +147,7 @@ void sigpipe_handler(int sig)
                     if ((self.dispatch = [self doesRequestMatch:localRequest]) != nil) {
                         TRACE("Request matched: %s from request=%s\n", [self.dispatch.request UTF8String], [localRequest UTF8String]);
                         isRequestMatched = YES;
-                        self.headers = self.dispatch.requestHeaders;
+                        self.headers = [[NSMutableDictionary alloc] initWithDictionary:self.dispatch.requestHeaders];
                     }
 					TRACE(">>>>>> found request: %s\n", [localRequest UTF8String]);
 					isRequestValid = YES;
@@ -241,11 +239,11 @@ void sigpipe_handler(int sig)
 	}
 }
 
-- (NSData*)constructHeader:(NSDictionary*)headers
+- (NSData*)constructHeader:(NSDictionary*)resHeaders
 {
     NSMutableString *data = [[NSMutableString alloc] initWithUTF8String:Response200];
-    for (NSString *k in headers.allKeys) {
-        NSString *v = [headers objectForKey:k];
+    for (NSString *k in resHeaders.allKeys) {
+        NSString *v = [resHeaders objectForKey:k];
         
         if (v != nil) {
             NSString *field = [NSString stringWithFormat:@"\r\n%@: %@", k, v];
@@ -338,7 +336,7 @@ void sigpipe_handler(int sig)
             const char *h_ptr = [header bytes];
             
             if ((writ = write(connfd, h_ptr, [header length])) != [header length]) {
-                NSLog(@"%s:write header %d, %s, writ=%d, len=%d", __func__, connfd, strerror(errno), writ, [header length]);
+                NSLog(@"%s:write header %d, %s, writ=%ld, len=%ld", __func__, connfd, strerror(errno),(unsigned long)writ, (unsigned long)[header length]);
                 goto clean;
             }
             

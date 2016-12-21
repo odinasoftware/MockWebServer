@@ -59,11 +59,7 @@ typedef enum {SEARCH_METHOD,
 - (void)stopLocalServer;
 - (BOOL)readFromConnection:(int)connfd;
 - (int)processRequestHeader:(ssize_t)count;
-- (HTTPUrlHelper*)getResponseWithOrigUrl:(NSString*)orig_url withHeader:(NSData**)header withBody:(NSData**)body toReleaseHeader:(BOOL*)release;
-- (HTTPUrlHelper*)getResponseWithFile:(NSString*)file withHeader:(NSData**)header withBody:(NSData**)body toReleaseHeader:(BOOL*)release;
 - (void)resetConnection;
 - (void)initSignalHandler;
-- (HTTPUrlHelper*)requestWithURLUseCache:(NSString*)orig_url responseHeader:(NSData**)header responseBody:(NSData**)body toReleaseHeader:(BOOL*)release;
-- (HTTPUrlHelper*)requestWithURL:(NSString*)orig_url fileToSave:(NSString*)file responseHeader:(NSData**)header responseBody:(NSData**)body toReleaseHeader:(BOOL*)release;
 
 @end

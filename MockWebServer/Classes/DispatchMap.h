@@ -19,7 +19,7 @@
 
 - (Dispatch*)requestContainString:(NSString*)string;
 - (Dispatch*)responseString:(NSString*)string;
-- (Dispatch*)setResponseCode:(int)code;
+- (Dispatch*)setResponseCode:(int)responseCode;
 - (Dispatch*)addResponseField:(NSString*)field value:(NSString*)value;
 - (Dispatch*)responseFromFile:(NSString*)name;
 - (Dispatch*)responseHeaders:(NSDictionary*)dict;

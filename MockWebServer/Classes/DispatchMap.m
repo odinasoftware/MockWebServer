@@ -30,9 +30,9 @@
     return self;
 }
 
-- (Dispatch*)setResponseCode:(int)code
+- (Dispatch*)setResponseCode:(int)responseCode
 {
-    self.code = code;
+    self.code = responseCode;
     return self;
 }
 
