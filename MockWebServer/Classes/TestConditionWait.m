@@ -12,6 +12,7 @@
 
 @implementation TestConditionWait
 
+static int _waitCount = 0;
 + (TestConditionWait*)instance
 {
     static TestConditionWait *_testConditionWait = nil;
@@ -33,17 +34,23 @@
     return self;
 }
 
-- (void)wait
+- (void)waitFor:(int)count
 {
+    _waitCount = count;
     [_waitCondition lock];
-    [_waitCondition wait];
+    do {
+        TRACE("wait count=%d", _waitCount);
+        [_waitCondition wait];
+    } while (--_waitCount > 0);
     [_waitCondition unlock];
     TRACE("%s: waken up.", __func__);
 }
 
 - (void)wakeup
 {
+    [_waitCondition lock];
     [_waitCondition signal];
+    [_waitCondition unlock];
 }
 
 @end

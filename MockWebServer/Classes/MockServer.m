@@ -17,9 +17,6 @@
 #import "MockServer.h"
 #import "MockServerManager.h"
 #import "DispatchMap.h"
-//#import "NetworkService.h"
-//#import "WebCacheService.h"
-//#import "HTTPUrlHelper.h"
 
 #define STOP_LOCAL_SERVER	"stop"
 #define CARRIAGE_RETURN		0x0d
@@ -91,12 +88,6 @@ void sigpipe_handler(int sig)
 		needToDisplaySplash = YES;
 		connectedFD = fd;
 		self.serverManager = manager;
-//        if (self.serverManager.requestHeaders != nil) {
-//            self.headers = [[NSMutableDictionary alloc] initWithDictionary:self.serverManager.requestHeaders];
-//        }
-//        else {
-//            self.headers = [[NSMutableDictionary alloc] init];
-//        }
 	}
 	
 	return self;
@@ -288,16 +279,12 @@ void sigpipe_handler(int sig)
 	ssize_t read_cnt = -1;
 	NSData *header=nil, *body=nil;
 	ssize_t writ = 0;
-	//BOOL flushConnectionNeeded = YES;
-	BOOL toRelease = NO;
 	ssize_t body_size = 0;
 	ssize_t write_size = 0;
 	const char *body_ptr = nil;
     BOOL isServerError = NO;
-	//pthread_mutex_lock(&network_mutex);
 	
 	do {
-		toRelease = NO;
 		read_cnt = -1;
 		writ = 0;
 		[self resetConnection];
@@ -305,7 +292,7 @@ void sigpipe_handler(int sig)
 		do {
 			read_cnt = read(connfd, local_buffer+currentWritePtr, (LOCAL_BUFFER_SIZE-currentWritePtr));
 			if (read_cnt < 0) {
-				NSLog(@"%s: %d, %s, %d", __func__, connfd, strerror(errno), broken_pipe_count);
+				NSLog(@"%s:read %d, %s, %d", __func__, connfd, strerror(errno), broken_pipe_count);
 				goto clean;
 			}
 			if (read_cnt > 0) {
@@ -326,77 +313,56 @@ void sigpipe_handler(int sig)
 			}
 		} while (read_cnt > 0);
 		
-//		if (isRequestValid == YES) {
-			// process request
-            /*
-			if ([localRequest hasPrefix:@"/http"] == YES) {
-				// this has original request
-				helper = [self getResponseWithOrigUrl:[localRequest substringFromIndex:1] withHeader:&header withBody:&body toReleaseHeader:&toRelease]; 
-				needToDisplaySplash = YES;
-			}
-			else {
-				// TODO: get local file
-				//   1. Check the cached file see if it is existed.
-				//   2. If not, then get it from web.
-				helper = [self getResponseWithFile:localRequest withHeader:&header withBody:&body toReleaseHeader:&toRelease];
-				
-				if (needToDisplaySplash == YES && [[localRequest pathExtension] compare:@"css"] != NSOrderedSame) {
-					// CSS has been loaded, web page should appear now.
-					//[(id)[[UIApplication sharedApplication] delegate] performSelectorOnMainThread:@selector(removeSplashView:) withObject:nil waitUntilDone:YES];
-					needToDisplaySplash = NO;
-				}
-			}
-             */
 			
-            /**
-             construct header based on user's template.
-             */
-            if (self.dispatch != nil) {
-                TRACE("Found matching request.");
-                header = [self constructHeader:self.dispatch.responseField];
-                body = [self.dispatch.responseString dataUsingEncoding:NSUTF8StringEncoding];
-            }
-            else if (isRequestValid == YES) {
-                TRACE("No matching request found.");
-                header = [self construct404Header];
-                body = [NSData dataWithBytes:NOT_FOUND_BODY length:strlen(NOT_FOUND_BODY)];
-            }
-            else {
-                TRACE("Something wrong with request or we have an error in the server.");
-                header = [self construct500Header];
-                body = [NSData dataWithBytes:SERVER_ERROR_BODY length:strlen(SERVER_ERROR_BODY)];
+        /**
+         construct header based on user's template.
+         */
+        if (self.dispatch != nil) {
+            TRACE("Found matching request.");
+            header = [self constructHeader:self.dispatch.responseField];
+            body = [self.dispatch.responseString dataUsingEncoding:NSUTF8StringEncoding];
+        }
+        else if (isRequestValid == YES) {
+            TRACE("No matching request found.");
+            header = [self construct404Header];
+            body = [NSData dataWithBytes:NOT_FOUND_BODY length:strlen(NOT_FOUND_BODY)];
+        }
+        else {
+            TRACE("Something wrong with request or we have an error in the server.");
+            header = [self construct500Header];
+            body = [NSData dataWithBytes:SERVER_ERROR_BODY length:strlen(SERVER_ERROR_BODY)];
+        }
+        
+        if (header != nil && body != nil) {
+            // write the header and body
+            const char *h_ptr = [header bytes];
+            
+            if ((writ = write(connfd, h_ptr, [header length])) != [header length]) {
+                NSLog(@"%s:write header %d, %s, writ=%d, len=%d", __func__, connfd, strerror(errno), writ, [header length]);
+                goto clean;
             }
             
-            if (header != nil && body != nil) {
-                // write the header and body
-                const char *h_ptr = [[NSString stringWithUTF8String:[header bytes]] UTF8String];
-               
-                if ((writ = write(connfd, h_ptr, [header length])) != [header length]) {
-                    NSLog(@"%s: %d, %s, %d", __func__, connfd, strerror(errno), broken_pipe_count);
-                    goto clean;
-                }
-                
-                if (body != nil) {
-                    body_size = [body length];
-                    body_ptr = [[NSString stringWithUTF8String:[body bytes]] UTF8String];
-                    while (body_size > 0) {
-                        if (body_size > CHUNKED_SIZE)
-                            write_size = CHUNKED_SIZE;
-                        else
-                            write_size = body_size;
-                        if ((writ = write(connfd, body_ptr, write_size)) != write_size) {
-                            NSLog(@"%s: %d, %s, %d", __func__, connfd, strerror(errno), broken_pipe_count);
-                            goto clean;
-                        }
-                        body_size -= write_size;
-                        body_ptr += write_size;
+            if (body != nil) {
+                body_size = [body length];
+                body_ptr = [body bytes];
+                while (body_size > 0) {
+                    if (body_size > CHUNKED_SIZE)
+                        write_size = CHUNKED_SIZE;
+                    else
+                        write_size = body_size;
+                    if ((writ = write(connfd, body_ptr, write_size)) != write_size) {
+                        NSLog(@"%s:write body %d, %s, %d", __func__, connfd, strerror(errno), broken_pipe_count);
+                        goto clean;
                     }
+                    body_size -= write_size;
+                    body_ptr += write_size;
                 }
-                TRACE(">>>>> Writing response: fd: %d, header: %lu, body: %lu\n",
-                      connfd, (unsigned long)[header length], (unsigned long)[body length]);
-                
             }
-//		}
+            TRACE(">>>>> Writing response: fd: %d, header: %lu, body: %lu\n",
+                  connfd, (unsigned long)[header length], (unsigned long)[body length]);
+            
+        }
+        
 		shutdown(connfd, SHUT_RDWR);
 	} while (YES);
 	
@@ -405,16 +371,11 @@ void sigpipe_handler(int sig)
 clean:
 	close(connfd);
 
-	if (toRelease == YES) {
-
-	}
-	
-	//pthread_mutex_unlock(&network_mutex);
 	return ret;
 }
 
 
-- (void)main 
+- (void)main
 {
 	
 	
@@ -424,12 +385,9 @@ clean:
 	}
 	isRequestValid = NO;
 	
-	//[self resetConnection];
-	//[self startLocalServer];
 	if ([self readFromConnection:connectedFD] == YES) {
 		currentReadPtr = currentWritePtr = markIndex = 0;
 	}
-	//close(connectedFD);
 	
 	if (localRequest != nil) {
 	

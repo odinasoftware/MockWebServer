@@ -45,13 +45,57 @@ class TestMockServer: XCTestCase {
         
         let task = URLSession.shared.dataTask(with: url! as URL) {
             (data, response, error) in
-            debugPrint("response data=", data)
-            debugPrint("response headers=", response)
+            debugPrint("response data=", data ?? "response null", "\n")
+            debugPrint("response headers=", response ?? "no response header", "\n")
             testCondition.wakeup()
         }
         
         task.resume()
-        testCondition.wait()
+        testCondition.wait(for: 1)
+    }
+    
+    func testMultipleResponse() {
+        let dispatchMap: DispatchMap = DispatchMap()
+        let dispatch: Dispatch = Dispatch()
+        
+        dispatch.requestContain("test1")
+            .setResponseCode(200)
+            .responseString("test")
+            .responseHeaders(["Accept-encoding": "*.*"])
+        dispatchMap.add(dispatch)
+        
+        let dispatch1: Dispatch = Dispatch()
+        dispatch1.requestContain("test2")
+            .setResponseCode(200)
+            .responseBody(for: Bundle(for: object_getClass(self)), fromFile: "response.json")
+            .responseHeaders(["Accept-encoding": "*.*"])
+        dispatchMap.add(dispatch1)
+        
+        mockWebServer.setDispatch(dispatchMap)
+        
+        let url = NSURL(string: "http://127.0.0.1:9000/test1")
+        let url2 = NSURL(string: "http://127.0.0.1:9000/test2")
+        
+        let testCondition: TestConditionWait = TestConditionWait.instance()
+        
+        let task = URLSession.shared.dataTask(with: url! as URL) {
+            (data, response, error) in
+            debugPrint("response data=", data ?? "response null")
+            debugPrint("response headers=", response ?? "no response header")
+            testCondition.wakeup()
+        }
+        
+        task.resume()
+        
+        let task2 = URLSession.shared.dataTask(with: url2! as URL) {
+            (data, response, error) in
+            debugPrint("response data=", data ?? "response null", "\n")
+            debugPrint("response headers=", response ?? "no response header", "\n")
+            testCondition.wakeup()
+        }
+        task2.resume()
+        
+        testCondition.wait(for: 2)
     }
     
 }

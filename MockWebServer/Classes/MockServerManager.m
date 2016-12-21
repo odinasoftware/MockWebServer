@@ -130,7 +130,7 @@
                 }
             }
             
-            TRACE("LocalServer, accepting connection: %d from listening %d\n", connfd, listenfd);
+            TRACE("MockServerManager, accepting connection: %d from listening %d\n", connfd, listenfd);
             //setsockopt(connfd, SOL_SOCKET, SO_LINGER, &l_onoff, sizeof(l_onoff));
             if (setsockopt(connfd, IPPROTO_TCP, TCP_NODELAY, &onoff, sizeof(onoff)) < 0) {
                 NSLog(@"%s, failed to set nodelay. %s", __func__, strerror(errno));

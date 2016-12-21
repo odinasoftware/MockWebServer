@@ -14,7 +14,7 @@
 
 + (TestConditionWait*)instance;
 
-- (void)wait;
+- (void)waitFor:(int)count;
 - (void)wakeup;
 
 @end

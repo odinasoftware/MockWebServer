@@ -60,7 +60,7 @@
     
     // 3
     [test resume];
-    [testWait wait];
+    [testWait waitFor:1];
 
 }
 
