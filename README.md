@@ -4,6 +4,20 @@
 [![Version](https://img.shields.io/cocoapods/v/MockWebServer.svg?style=flat)](http://cocoapods.org/pods/MockWebServer)
 [![License](https://img.shields.io/cocoapods/l/MockWebServer.svg?style=flat)](http://cocoapods.org/pods/MockWebServer)
 [![Platform](https://img.shields.io/cocoapods/p/MockWebServer.svg?style=flat)](http://cocoapods.org/pods/MockWebServer)
+ 
+MockWebServer is a very simple web server that is solely designed to work with XCTest framework. 
+MockWebServer mocks a web server's behavior. User can specify server's response headers and body by matching request pattern. 
+The idea is that it can work simiarly with MockWebServer by Square for Android so that a unit test or UI test can perform test case based on 
+server's response. Since user can specify the server's response in a test case, user can determine how a test case should behave.  
+
+## Compatibility
+
+MockWebServer is compatible with objective-c and swift, and also it can work with Cocoapods or Carthage. To use MockWebServer in Carthage, you can simple add this line to `Carfile`.
+
+```shell
+github "odinasoftware/MockWebServer"
+```
+MockWebServer is impemented by objective-c only so that it can work with objective-c or any version of swift. 
 
 ## Example
 
@@ -69,13 +83,88 @@ XCTAssert([[NSString stringWithUTF8String:[data bytes]] compare:@"test"]==0, @"B
 Since the task is asynchronous, the test must wait until the asynchrnous taks is completed. You may want to use helper function to do that. First you will need to create `TestConditionWait` and you will need to wait after the url task is resumed.
 
 ```objective-c
-TestConditionWait *testWait = [[TestConditionWait alloc] init];
+TestConditionWait *testWait = [TestConditionWait instance];
 ...
 [test resume];
-[testWait wait];
+[testWait waitFor:1];
 ```
 
-`testWait` will wait until `[testWait wakeup]` is called. 
+`testWait` will wait until `[testWait wakeup]` is called. User can also specifiy how many thread it has to wait. 
+
+### Swift Example
+
+User will need to start MockWebServer in `setup()`. 
+
+```swift
+override func setUp() {
+    super.setUp()
+    ...
+    mockWebServer.start()
+
+}
+```
+
+User will need to stop the server when a unit test is completed.
+
+```swift
+override func tearDown() {
+    super.tearDown()
+    ...
+    mockWebServer.stop()
+}
+```
+
+As it's done in objective-c example, user will need to specify a dispatch for a response.
+
+```swift
+let dispatch: Dispatch = Dispatch()
+
+dispatch.requestContain("test1")
+    .setResponseCode(200)
+    .responseString("test")
+    .responseHeaders(["Accept-encoding": "*.*"])
+
+dispatchMap.add(dispatch)
+```
+User can also have multiple dispatch to simulate mubliptle response in a test case.
+
+```swift
+let dispatch1: Dispatch = Dispatch()
+
+dispatch1.requestContain("test2")
+    .setResponseCode(200)
+    .responseBody(for: Bundle(for: object_getClass(self)), fromFile: "response.json")
+    .responseHeaders(["Accept-encoding": "*.*"])
+dispatchMap.add(dispatch1)
+```
+Not user created two dispates, which correspnd to two responses. User will need to add those dispatches to the dispatch map.
+
+```swift
+mockWebServer.setDispatch(dispatchMap)
+```
+
+```swift
+let task = URLSession.shared.dataTask(with: url! as URL) {
+    (data, response, error) in
+    debugPrint("response data=", data ?? "response null")
+    debugPrint("response headers=", response ?? "no response header")
+    testCondition.wakeup()
+}
+
+task.resume()
+
+let task2 = URLSession.shared.dataTask(with: url2! as URL) {
+    (data, response, error) in
+    debugPrint("response data=", data ?? "response null", "\n")
+    debugPrint("response headers=", response ?? "no response header", "\n")
+    testCondition.wakeup()
+}
+task2.resume()
+
+testCondition.wait(for: 2)
+```
+
+As shown in objective-c example, user can use `TestConditionWait` to wait until data thread to finish. In this case, we have two data tasks to wait. 
 
 ## Requirements
 
