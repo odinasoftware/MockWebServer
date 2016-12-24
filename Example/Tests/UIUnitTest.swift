@@ -2,6 +2,7 @@
 //  UIUnitTest.swift
 //  MockWebServer
 //
+
 //  Created by Jae Han on 12/24/16.
 //  Copyright © 2016 jaehan. All rights reserved.
 //
@@ -34,9 +35,8 @@ class UIUnitTest: XCTestCase {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        for i in 1...10000 {
-            print("tese")
-        }
+        XCUIApplication().children(matching: .window).element(boundBy: 0).children(matching: .other).element.tap()
+        XCTAssert(true)
     }
     
 }
