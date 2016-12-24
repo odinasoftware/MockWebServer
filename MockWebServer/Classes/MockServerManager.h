@@ -20,7 +20,7 @@
 
 @interface MockWebServer : NSObject
 
-- (void)start;
+- (void)start:(int)port;
 - (void)stop;
 
 - (void)setDispatch:(DispatchMap*)dispatch;

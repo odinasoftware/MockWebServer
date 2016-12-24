@@ -19,6 +19,38 @@ github "odinasoftware/MockWebServer"
 ```
 MockWebServer is impemented by objective-c only so that it can work with objective-c or any version of swift. 
 
+## Test Requirements
+MockWebServer requires local connection to the server. Therefore user will need to connect to `localhost` and the port number MockWebServer is listening. 
+For instance, if the server start with `mockWebServer.start(9000)`, user may connect to MockWebServer as shown below: 
+
+```swift
+let url = NSURL(string: "http://127.0.0.1:9000/test")
+...
+let task = URLSession.shared.dataTask(with: url! as URL) {
+    (data, response, error) in
+    ...
+}
+```
+If user wants to run app transparently in a unit test, user will need to confiure app's environment to change to connect to `localhost` when it is running from a test case. For instance, in `setUp` user may set up environment like this:
+```swift
+let app = XCUIApplication()
+app.launchEnvironment["LOCAL_SERVER"] = "YES"
+app.launch()
+```
+
+Now in you application is launched, you can check to see if it is launced from UI test case like this:
+```objective-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    // Override point for customization after application launch.
+
+    if ([[NSProcessInfo processInfo].environment objectForKey:@"LOCAL_SERVER"] != nil) {
+        // Your environment detects UI test, use local server instead.
+    }
+    return YES;
+}
+```
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -26,13 +58,13 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 ### Objective C Example
 
 #### Initializing MockWebServer
-Initialize `MockWebServer` in `setUp` and run `startServer`.
+Initialize `MockWebServer` in `setUp` and run `start` with port number for the server.
 
 ```objective-c
 - (void)setUp {
     [super setUp];
     mockWebServer = [[MockWebServer alloc] init];
-    [mockWebServer startServer];
+    [mockWebServer start:9000];
 }
 ```
 
@@ -93,13 +125,13 @@ TestConditionWait *testWait = [TestConditionWait instance];
 
 ### Swift Example
 
-User will need to start MockWebServer in `setup()`. 
+User will need to start MockWebServer in `setup()` with the port number for the server. 
 
 ```swift
 override func setUp() {
     super.setUp()
     ...
-    mockWebServer.start()
+    mockWebServer.start(9000)
 
 }
 ```

@@ -21,6 +21,8 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		802562531E0F1CD60062E053 /* MockWebServer_ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802562521E0F1CD60062E053 /* MockWebServer_ExampleUITests.swift */; };
+		8025625A1E0F1CE30062E053 /* UIUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8025624A1E0F15760062E053 /* UIUnitTest.swift */; };
 		804341751DFC86710064EB4F /* TestMockServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 804341731DFC85050064EB4F /* TestMockServer.m */; };
 		80F107431DED2A760059272D /* response.json in Resources */ = {isa = PBXBuildFile; fileRef = 80F107421DED2A760059272D /* response.json */; };
 		80FC0C4B1DFC8FBA001BD3CE /* TestMockServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC0C4A1DFC8FBA001BD3CE /* TestMockServer.swift */; };
@@ -35,6 +37,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6003F589195388D20070C39A;
 			remoteInfo = MockWebServer;
+		};
+		802562551E0F1CD60062E053 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6003F582195388D10070C39A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6003F589195388D20070C39A;
+			remoteInfo = MockWebServer_Example;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -62,6 +71,10 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		6C243CA643826F5725B0029C /* Pods-MockWebServer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockWebServer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MockWebServer_Tests/Pods-MockWebServer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		79BEF8C1DD9C729CE035D94E /* MockWebServer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MockWebServer.podspec; path = ../MockWebServer.podspec; sourceTree = "<group>"; };
+		8025624A1E0F15760062E053 /* UIUnitTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUnitTest.swift; sourceTree = "<group>"; };
+		802562501E0F1CD60062E053 /* MockWebServer_ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockWebServer_ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		802562521E0F1CD60062E053 /* MockWebServer_ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebServer_ExampleUITests.swift; sourceTree = "<group>"; };
+		802562541E0F1CD60062E053 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		804341731DFC85050064EB4F /* TestMockServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestMockServer.m; sourceTree = "<group>"; };
 		80F107421DED2A760059272D /* response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response.json; sourceTree = "<group>"; };
 		80FC0C4A1DFC8FBA001BD3CE /* TestMockServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMockServer.swift; sourceTree = "<group>"; };
@@ -96,6 +109,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8025624D1E0F1CD60062E053 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -105,6 +125,7 @@
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for MockWebServer */,
 				6003F5B5195388D20070C39A /* Tests */,
+				802562511E0F1CD60062E053 /* MockWebServer_ExampleUITests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				EC9064556A090222764C275B /* Pods */,
@@ -116,6 +137,7 @@
 			children = (
 				6003F58A195388D20070C39A /* MockWebServer_Example.app */,
 				6003F5AE195388D20070C39A /* MockWebServer_Tests.xctest */,
+				802562501E0F1CD60062E053 /* MockWebServer_ExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,6 +189,7 @@
 				6003F5BB195388D20070C39A /* Tests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 				80FC0C4A1DFC8FBA001BD3CE /* TestMockServer.swift */,
+				8025624A1E0F15760062E053 /* UIUnitTest.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -189,6 +212,15 @@
 				EBCB054D8E72059DC2EA8A2D /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		802562511E0F1CD60062E053 /* MockWebServer_ExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				802562521E0F1CD60062E053 /* MockWebServer_ExampleUITests.swift */,
+				802562541E0F1CD60062E053 /* Info.plist */,
+			);
+			path = MockWebServer_ExampleUITests;
 			sourceTree = "<group>";
 		};
 		EC9064556A090222764C275B /* Pods */ = {
@@ -246,6 +278,24 @@
 			productReference = 6003F5AE195388D20070C39A /* MockWebServer_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		8025624F1E0F1CD60062E053 /* MockWebServer_ExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 802562571E0F1CD60062E053 /* Build configuration list for PBXNativeTarget "MockWebServer_ExampleUITests" */;
+			buildPhases = (
+				8025624C1E0F1CD60062E053 /* Sources */,
+				8025624D1E0F1CD60062E053 /* Frameworks */,
+				8025624E1E0F1CD60062E053 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				802562561E0F1CD60062E053 /* PBXTargetDependency */,
+			);
+			name = MockWebServer_ExampleUITests;
+			productName = MockWebServer_ExampleUITests;
+			productReference = 802562501E0F1CD60062E053 /* MockWebServer_ExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -253,11 +303,18 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = WS;
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = jaehan;
 				TargetAttributes = {
 					6003F5AD195388D20070C39A = {
 						LastSwiftMigration = 0810;
+						TestTargetID = 6003F589195388D20070C39A;
+					};
+					8025624F1E0F1CD60062E053 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = G7K2PXD2JW;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 6003F589195388D20070C39A;
 					};
 				};
@@ -277,6 +334,7 @@
 			targets = (
 				6003F589195388D20070C39A /* MockWebServer_Example */,
 				6003F5AD195388D20070C39A /* MockWebServer_Tests */,
+				8025624F1E0F1CD60062E053 /* MockWebServer_ExampleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -298,6 +356,13 @@
 			files = (
 				80F107431DED2A760059272D /* response.json in Resources */,
 				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8025624E1E0F1CD60062E053 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +482,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8025624C1E0F1CD60062E053 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				802562531E0F1CD60062E053 /* MockWebServer_ExampleUITests.swift in Sources */,
+				8025625A1E0F1CE30062E053 /* UIUnitTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -424,6 +498,11 @@
 			isa = PBXTargetDependency;
 			target = 6003F589195388D20070C39A /* MockWebServer_Example */;
 			targetProxy = 6003F5B3195388D20070C39A /* PBXContainerItemProxy */;
+		};
+		802562561E0F1CD60062E053 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6003F589195388D20070C39A /* MockWebServer_Example */;
+			targetProxy = 802562551E0F1CD60062E053 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -485,7 +564,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -523,7 +602,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -614,6 +693,45 @@
 			};
 			name = Release;
 		};
+		802562581E0F1CD60062E053 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = G7K2PXD2JW;
+				INFOPLIST_FILE = MockWebServer_ExampleUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.odinasoftware.MockWebServer-ExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = MockWebServer_Example;
+			};
+			name = Debug;
+		};
+		802562591E0F1CD60062E053 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = G7K2PXD2JW;
+				INFOPLIST_FILE = MockWebServer_ExampleUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.odinasoftware.MockWebServer-ExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = MockWebServer_Example;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -643,6 +761,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		802562571E0F1CD60062E053 /* Build configuration list for PBXNativeTarget "MockWebServer_ExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				802562581E0F1CD60062E053 /* Debug */,
+				802562591E0F1CD60062E053 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

@@ -23,7 +23,7 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     mockWebServer = [[MockWebServer alloc] init];
-    [mockWebServer start];
+    [mockWebServer start:9000];
 }
 
 - (void)tearDown {
@@ -44,7 +44,7 @@
     [dispatchMap addDispatch:dispatch];
     [mockWebServer setDispatch:dispatchMap];
     
-    TestConditionWait *testWait = [[TestConditionWait alloc] init];
+    TestConditionWait *testWait = [TestConditionWait instance];
     NSString *dataUrl = @"http://127.0.0.1:9000/test";
     NSURL *url = [NSURL URLWithString:dataUrl];
     

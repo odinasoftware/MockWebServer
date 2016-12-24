@@ -13,6 +13,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+
+    if ([[NSProcessInfo processInfo].environment objectForKey:@"LOCAL_SERVER"] != nil) {
+        // Your environment detects UI test, use local server instead.
+    }
     return YES;
 }
 

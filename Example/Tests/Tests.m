@@ -18,7 +18,7 @@ describe(@"Mock server test with string", ^{
     beforeEach(^{
         // This is run before each example.
         manager = [[MockWebServer alloc] init];
-        [manager start];
+        [manager start:9000];
     });
     
     afterEach(^{

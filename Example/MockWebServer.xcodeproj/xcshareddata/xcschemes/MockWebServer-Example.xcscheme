@@ -38,6 +38,16 @@
                ReferencedContainer = "container:MockWebServer.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8025624F1E0F1CD60062E053"
+               BuildableName = "MockWebServer_ExampleUITests.xctest"
+               BlueprintName = "MockWebServer_ExampleUITests"
+               ReferencedContainer = "container:MockWebServer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

@@ -22,7 +22,6 @@
 
 #define MAX_LOCAL_SERVER_THREAD	1
 #define INTERRUPT_SIGNAL        2
-#define LOCAL_PORT				9000
 #define LISTENQ					32
 
 
@@ -32,6 +31,7 @@
     BOOL        isListening;
     BOOL        isStopped;
     int         listenfd;
+    int         listeningPort;
 }
 
 
@@ -60,8 +60,9 @@
 	return self;
 }
 
-- (void)startServer
+- (void)startServer:(int)port
 {
+    self->listeningPort = port;
     [self start];
     
     [waitForThread lock];
@@ -93,7 +94,7 @@
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port = htons(LOCAL_PORT);
+    servaddr.sin_port = htons(self->listeningPort);
     setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
     if (bind(listenfd, (const struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
         NSLog(@"%s: bind error=%s", __func__, strerror(errno));
@@ -210,9 +211,9 @@
     return self;
 }
 
-- (void)start
+- (void)start:(int)port
 {
-    [self.mockServerManager startServer];
+    [self.mockServerManager startServer:port];
 }
 
 - (void)stop
