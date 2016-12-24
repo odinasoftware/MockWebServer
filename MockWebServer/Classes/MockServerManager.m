@@ -35,7 +35,7 @@
 }
 
 
-- (void)startServer;
+- (void)startServer:(int)port;
 - (void)stopServer;
 - (void)startLocalServerManager;
 - (void)exitConnThread:(id)thread;
