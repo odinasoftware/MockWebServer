@@ -158,7 +158,7 @@ dispatch.requestContain("test1")
 
 dispatchMap.add(dispatch)
 ```
-User can also have multiple dispatch to simulate mubliptle response in a test case.
+User can also have multiple dispatch to simulate multiple response in a test case.
 
 ```swift
 let dispatch1: Dispatch = Dispatch()
@@ -169,7 +169,7 @@ dispatch1.requestContain("test2")
     .responseHeaders(["Accept-encoding": "*.*"])
 dispatchMap.add(dispatch1)
 ```
-Not user created two dispates, which correspnd to two responses. User will need to add those dispatches to the dispatch map.
+Now user created two dispates, which correspnd to two responses. User will need to add those dispatches to the dispatch map.
 
 ```swift
 mockWebServer.setDispatch(dispatchMap)
